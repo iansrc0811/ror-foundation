@@ -1,6 +1,7 @@
 <%= form_for [@project, @task] do |f| %>
   <% if @task.errors.any? %>
-    <%= pluralize(@task.errors.count, "error") %> prohibited this project from being saved:
+    <%= pluralize(@task.errors.count, “error”) %> prohibited this project from being saved:
+
     <% @task.errors.full_messages.each do |message| %>
       <%= message %>
     <% end %>

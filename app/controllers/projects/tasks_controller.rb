@@ -1,6 +1,6 @@
 class Projects::TasksController < ApplicationController
   before_action :set_task, only: [:show, :edit, :update, :destroy]
-  before_action :set_project, only: [:show, :new, :create, :edit, :update, :destroy]
+  before_action :set_project, only: [:show, :new, :edit, :create, :update, :destroy]
 
   def show
   end
@@ -14,51 +14,53 @@ class Projects::TasksController < ApplicationController
 
   def create
     @task = Task.new(task_params)
-    @task.project_id = @project_id
-    respond_to do |formate| 
+    @task.project_id = @project.id 
+    # @project由set_project 得到 
+    #在 _form.html.erb傳入@task和@project
+
+    respond_to do |format|
       if @task.save
-        formate.html { redirect_to project_url(@task.project_id), notice: "Task was created successfully!"}
-        formate.json { render :show, status: :created, location: @task}
+        format.html { redirect_to project_url(@task.project_id), notice: "Task was created successfully!"}
+        format.json { render :show, status: :created, location: @task }
       else
-        formate.html { render :new}
-        formate.json { render json: @task.errors, status: :unprocessable_entity}
+        format.html { render :new }
+        format.json { render json: @task.errors, status: :unprocessable_entity }
       end
     end
   end
 
   def update
-    respond_to do |formate| 
+    respond_to do |format|
       if @task.update(task_params)
-        formate.html { redirect_to project_url(@task.project_id), notice: "Task was updated successfully!"}
-        formate.json { render :show, status: :created, location: @task}
+        format.html { redirect_to project_url(@task.project_id), notice: "Task was updated successfully!"}
+        format.json { render :show, status: :created, location: @task }
       else
-        formate.html { render :edit}
-        formate.json { render json: @task.errors, status: :unprocessable_entity}
+        format.html { render :edit }
+        format.json { render json: @task.errors, status: :unprocessable_entity }
       end
     end
   end
 
   def destroy
     @task.destroy
-    respond_to do |formate|
-
-    formate.html { redirect_to project_url(@task.project_id), notice: "Task was deleted successfully!"}
-    formate.json {head :no_content }
+    respond_to do |format|
+      format.html { redirect_to project_url(@task.project_id), notice: "Task was deleted successfully!"}
+      format.json { head :no_content }
+    end
   end
 
   private
+
     def set_task
       @task = Task.find(params[:id])
     end
-    
+
     def set_project
-      @project = Project.find(params[:project_id]) 
-      #如果url是 .com/project/5/task/2 ，這邊就會找尋project_id為5的project
+      #從url中找到project_id
+      @project = Project.find(params[:project_id])
     end
 
     def task_params
-      params.require(:task).permit(:title, :description, :project_id,
-       :completed, :task_file)
+      params.require(:task).permit(:title, :description, :project_id, :completed, :task_file)
     end
-  end
 end
