@@ -4,6 +4,9 @@ class Task < ActiveRecord::Base
   after_save :update_percent_complete if :mark_completed?
 
   scope :is_completed, -> { where(completed: true) } #後面的'completed'是指Task的completed colunm
+  
+  mount_uploader :task_file, TaskFileUploader
+
   def mark_completed?
     self.completed ==true
   end

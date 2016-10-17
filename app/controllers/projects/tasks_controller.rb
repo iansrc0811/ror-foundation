@@ -14,9 +14,7 @@ class Projects::TasksController < ApplicationController
 
   def create
     @task = Task.new(task_params)
-    @task.project_id = @project.id 
-    # @project由set_project 得到 
-    #在 _form.html.erb傳入@task和@project
+    @task.project_id = @project.id
 
     respond_to do |format|
       if @task.save
@@ -56,7 +54,6 @@ class Projects::TasksController < ApplicationController
     end
 
     def set_project
-      #從url中找到project_id
       @project = Project.find(params[:project_id])
     end
 
