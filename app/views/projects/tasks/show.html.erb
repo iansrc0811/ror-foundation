@@ -12,7 +12,7 @@
   <p><em>Task is pending</em></p>
 <% end %>
 
-<% unless @task_file.blank? %>
+<% unless @task.task_file.blank? %>
   <p><%= link_to "Attachment", @task.task_file.to_s %></p>
 <% end %>
 
